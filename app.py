@@ -32,12 +32,12 @@ def main():
                 column2_data.append(value)
 
     # Display the table
-    with st.expander("Table Data"):
-        df = pd.DataFrame({
-            'Column 1': column1_data,
-            'Column 2': column2_data
-        }, index=row_names)
-        st.table(df)
+    st.write('### Table Data')
+    df = pd.DataFrame({
+        'Column 1': column1_data,
+        'Column 2': column2_data
+    }, index=row_names)
+    st.table(df)
 
     # Selection after input
     # st.write('### Select Rows for Calculation')
