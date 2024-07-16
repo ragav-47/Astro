@@ -32,12 +32,12 @@ def main():
                 column2_data.append(value)
 
     # Display the table
-    st.write('### Table Data')
-    df = pd.DataFrame({
-        'Column 1': column1_data,
-        'Column 2': column2_data
-    }, index=row_names)
-    st.table(df)
+    with st.expander("Table Data"):
+        df = pd.DataFrame({
+            'Column 1': column1_data,
+            'Column 2': column2_data
+        }, index=row_names)
+        st.table(df)
 
     # Selection after input
     # st.write('### Select Rows for Calculation')
@@ -68,7 +68,7 @@ def main():
                             first_column = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
                             
                             # st.write(f"Added value for ({selected_row_col1} and {selected_row_col2}): {first_output}")
-                            st.markdown(f"<h8 style='font-weight: bold;'>Added value for 1 ({selected_row_col1} and {row_names[i]}) - {first_column}</h8>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='font-weight: bold;'>Added value for 1 ({selected_row_col1} and {row_names[i]}) - {first_column}</p>", unsafe_allow_html=True)
 
                             # Calculate the second output: divide first output by 2 from right to left
                             # Divide total time by 2 from right to left
@@ -83,7 +83,7 @@ def main():
                             column_1_div = f"{new_h:02}:{new_m:02}:{new_s:02}"
                             
                             # st.write(f"Divided by 2: {second_output}")
-                            st.markdown(f"<h8 style='font-weight: bold;'>Divided by 2 - {column_1_div}</h8>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='font-weight: bold;'>Divided by 2 - {column_1_div}</p>", unsafe_allow_html=True)
                             st.write("\n\n\n")
                 with col4:
                     # second_Column
@@ -101,7 +101,7 @@ def main():
                             second_column = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
                             
                             # st.write(f"Added value for ({selected_row_col1} and {selected_row_col2}): {first_output}")
-                            st.markdown(f"<h8 style='font-weight: bold;'>Added value for 2({selected_row_col1} and {row_names[i]}) - {second_column}</h8>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='font-weight: bold;'>Added value for 2({selected_row_col1} and {row_names[i]}) - {second_column}</p>", unsafe_allow_html=True)
 
                             # Calculate the second output: divide first output by 2 from right to left
                             # Divide total time by 2 from right to left
@@ -116,7 +116,7 @@ def main():
                             column_2_div = f"{new_h:02}:{new_m:02}:{new_s:02}"
                             
                             # st.write(f"Divided by 2: {second_output}")
-                            st.markdown(f"<h8 style='font-weight: bold;'>Divided by 2 - {column_2_div}</h8>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='font-weight: bold;'>Divided by 2 - {column_2_div}</p>", unsafe_allow_html=True)
                             st.write("\n\n\n")
             else:
                 st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
