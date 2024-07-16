@@ -42,7 +42,6 @@ def main():
     # Selection after input
     # st.write('### Select Rows for Calculation')
     selected_row_col1 = st.selectbox('Select from Column 1', row_names)
-    selected_row_col2 = st.selectbox('Select from Column 2', row_names)
 
     # Button to start calculation
     # Button to start calculation
@@ -50,74 +49,75 @@ def main():
         try:
             # Retrieve selected values from columns
             index_1 = row_names.index(selected_row_col1)
-            index_2 = row_names.index(selected_row_col2)
-
+            col3, col4 = st.columns(2)
             # Perform calculation using selected rows
-            if ':' in column1_data[index_1] and ':' in column1_data[index_2] and ':' in column2_data[index_1] and ':' in column2_data[index_2]:
-                h1, m1, s1 = map(int, column1_data[index_1].split(':'))
-                h2, m2, s2 = map(int, column1_data[index_2].split(':'))
-                
-                # Calculate total time in seconds
-                total_seconds = (h1 + h2) * 3600 + (m1 + m2) * 60 + (s1 + s2)
-                
-                # Calculate the first output: sum of two values
-                total_hours = total_seconds // 3600
-                total_minutes = (total_seconds % 3600) // 60
-                total_seconds = total_seconds % 60
-                
-                first_column = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
-                
-                # st.write(f"Added value for ({selected_row_col1} and {selected_row_col2}): {first_output}")
-                st.markdown(f"<h3 style='font-weight: bold;'>Added value for 1 ({selected_row_col1} and {selected_row_col2}) - {first_column}</h3>", unsafe_allow_html=True)
+            if ':' in column1_data[index_1]  and ':' in column2_data[index_1] :
+                with col3:
+                        h1, m1, s1 = map(int, column1_data[index_1].split(':'))
+                        for i in range(9):
+                            h2, m2, s2 = map(int, column1_data[i].split(':'))
+                            
+                            # Calculate total time in seconds
+                            total_seconds = (h1 + h2) * 3600 + (m1 + m2) * 60 + (s1 + s2)
+                            
+                            # Calculate the first output: sum of two values
+                            total_hours = total_seconds // 3600
+                            total_minutes = (total_seconds % 3600) // 60
+                            total_seconds = total_seconds % 60
+                            
+                            first_column = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
+                            
+                            # st.write(f"Added value for ({selected_row_col1} and {selected_row_col2}): {first_output}")
+                            st.markdown(f"<h4 style='font-weight: bold;'>Added value for 1 ({selected_row_col1} and {row_names[i]}) - {first_column}</h4>", unsafe_allow_html=True)
 
-                # Calculate the second output: divide first output by 2 from right to left
-                # Divide total time by 2 from right to left
-                h, m, s = map(int, first_column.split(':'))
-                new_h=h//2
-                m+=(h%2)*60
-                new_m=m//2
-                new_s=m%2*60 +s
-                if new_s%2!=0:
-                    new_s+=1
-                new_s//=2
-                column_1_div = f"{new_h:02}:{new_m:02}:{new_s:02}"
-                
-                # st.write(f"Divided by 2: {second_output}")
-                st.markdown(f"<h3 style='font-weight: bold;'>Divided by 2 - {column_1_div}</h3>", unsafe_allow_html=True)
+                            # Calculate the second output: divide first output by 2 from right to left
+                            # Divide total time by 2 from right to left
+                            h, m, s = map(int, first_column.split(':'))
+                            new_h=h//2
+                            m+=(h%2)*60
+                            new_m=m//2
+                            new_s=m%2*60 +s
+                            if new_s%2!=0:
+                                new_s+=1
+                            new_s//=2
+                            column_1_div = f"{new_h:02}:{new_m:02}:{new_s:02}"
+                            
+                            # st.write(f"Divided by 2: {second_output}")
+                            st.markdown(f"<h4 style='font-weight: bold;'>Divided by 2 - {column_1_div}</h4>", unsafe_allow_html=True)
+                            st.write("\n\n\n")
+                with col4:
+                    # second_Column
+                    h1, m1, s1 = map(int, column2_data[index_1].split(':'))
+                    for i in range(9):
+                            h2, m2, s2 = map(int, column1_data[i].split(':'))
+                            # Calculate total time in seconds
+                            total_seconds = (h1 + h2) * 3600 + (m1 + m2) * 60 + (s1 + s2)
+                            
+                            # Calculate the first output: sum of two values
+                            total_hours = total_seconds // 3600
+                            total_minutes = (total_seconds % 3600) // 60
+                            total_seconds = total_seconds % 60
+                            
+                            second_column = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
+                            
+                            # st.write(f"Added value for ({selected_row_col1} and {selected_row_col2}): {first_output}")
+                            st.markdown(f"<h4 style='font-weight: bold;'>Added value for 2({selected_row_col1} and {row_names[i]}) - {second_column}</h4>", unsafe_allow_html=True)
 
-                # second_Column
-                h1, m1, s1 = map(int, column2_data[index_1].split(':'))
-                h2, m2, s2 = map(int, column2_data[index_2].split(':'))
-                
-                # Calculate total time in seconds
-                total_seconds = (h1 + h2) * 3600 + (m1 + m2) * 60 + (s1 + s2)
-                
-                # Calculate the first output: sum of two values
-                total_hours = total_seconds // 3600
-                total_minutes = (total_seconds % 3600) // 60
-                total_seconds = total_seconds % 60
-                
-                second_column = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
-                
-                # st.write(f"Added value for ({selected_row_col1} and {selected_row_col2}): {first_output}")
-                st.markdown(f"<h3 style='font-weight: bold;'>Added value for 2({selected_row_col1} and {selected_row_col2}) - {second_column}</h3>", unsafe_allow_html=True)
-
-                # Calculate the second output: divide first output by 2 from right to left
-                # Divide total time by 2 from right to left
-                h, m, s = map(int, second_column.split(':'))
-                new_h=h//2
-                m+=(h%2)*60
-                new_m=m//2
-                new_s=m%2*60 +s
-                if new_s%2!=0:
-                    new_s+=1
-                new_s//=2
-                column_2_div = f"{new_h:02}:{new_m:02}:{new_s:02}"
-                
-                # st.write(f"Divided by 2: {second_output}")
-                st.markdown(f"<h3 style='font-weight: bold;'>Divided by 2 - {column_2_div}</h3>", unsafe_allow_html=True)
-
-
+                            # Calculate the second output: divide first output by 2 from right to left
+                            # Divide total time by 2 from right to left
+                            h, m, s = map(int, second_column.split(':'))
+                            new_h=h//2
+                            m+=(h%2)*60
+                            new_m=m//2
+                            new_s=m%2*60 +s
+                            if new_s%2!=0:
+                                new_s+=1
+                            new_s//=2
+                            column_2_div = f"{new_h:02}:{new_m:02}:{new_s:02}"
+                            
+                            # st.write(f"Divided by 2: {second_output}")
+                            st.markdown(f"<h4 style='font-weight: bold;'>Divided by 2 - {column_2_div}</h4>", unsafe_allow_html=True)
+                            st.write("\n\n\n")
             else:
                 st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
 
