@@ -7,40 +7,26 @@ from dotenv import load_dotenv
 
 st.set_page_config(layout="wide")
 
-# Load environment variables from .env file (for local development)
-load_dotenv()
-
-FIREBASE_TYPE = os.getenv('FIREBASE_TYPE')
-FIREBASE_PROJECT_ID = os.getenv('FIREBASE_PROJECT_ID')
-FIREBASE_PRIVATE_KEY_ID = os.getenv('FIREBASE_PRIVATE_KEY_ID')
-FIREBASE_PRIVATE_KEY = os.getenv('FIREBASE_PRIVATE_KEY').replace('\\n', '\n')
-FIREBASE_CLIENT_EMAIL = os.getenv('FIREBASE_CLIENT_EMAIL')
-FIREBASE_CLIENT_ID = os.getenv('FIREBASE_CLIENT_ID')
-FIREBASE_AUTH_URI = os.getenv('FIREBASE_AUTH_URI')
-FIREBASE_TOKEN_URI = os.getenv('FIREBASE_TOKEN_URI')
-FIREBASE_AUTH_PROVIDER_X509_CERT_URL = os.getenv('FIREBASE_AUTH_PROVIDER_X509_CERT_URL')
-FIREBASE_CLIENT_X509_CERT_URL = os.getenv('FIREBASE_CLIENT_X509_CERT_URL')
-
-firebase_credentials = {
-    "type": FIREBASE_TYPE,
-    "project_id": FIREBASE_PROJECT_ID,
-    "private_key_id": FIREBASE_PRIVATE_KEY_ID,
-    "private_key": FIREBASE_PRIVATE_KEY,
-    "client_email": FIREBASE_CLIENT_EMAIL,
-    "client_id": FIREBASE_CLIENT_ID,
-    "auth_uri": FIREBASE_AUTH_URI,
-    "token_uri": FIREBASE_TOKEN_URI,
-    "auth_provider_x509_cert_url": FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-    "client_x509_cert_url": FIREBASE_CLIENT_X509_CERT_URL
+# Load Firebase credentials from Streamlit secrets
+firebase_creds = {
+    "type": st.secrets["firebase"]["type"],
+    "project_id": st.secrets["firebase"]["project_id"],
+    "private_key_id": st.secrets["firebase"]["private_key_id"],
+    "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+    "client_email": st.secrets["firebase"]["client_email"],
+    "client_id": st.secrets["firebase"]["client_id"],
+    "auth_uri": st.secrets["firebase"]["auth_uri"],
+    "token_uri": st.secrets["firebase"]["token_uri"],
+    "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+    "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"],
 }
 
-# Check if Firebase app is already initialized
+# Initialize the Firebase app with the credentials
 if not firebase_admin._apps:
-    # Initialize Firebase app
-    cred = credentials.Certificate(firebase_credentials)
+    cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred)
 
-# Create Firestore client
+# Now you can use Firestore or other Firebase services
 db = firestore.client()
 
 # Function to save data to Firestore
