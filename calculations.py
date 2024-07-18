@@ -1,11 +1,20 @@
 import streamlit as st
 Rasi=['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)','கும்பம் (சனி)', 'மீனம் (குரு)']
+star = ["அசுவினி","பரணி","கிருத்திகை","ரோகிணி","மிருகசீரிடம்","திருவாதிரை","புனர்பூசம்","பூசம்","ஆயில்யம்","மகம்","பூரம்","உத்திரம்","ஹஸ்தம்","சித்திரை","சுவாதி","விசாகம்","அனுஷம்","கேட்டை","மூலம்","பூராடம்","உத்திராடம்","திருவோணம்","அவிட்டம்","சதயம்","பூரட்டாதி","உத்திரட்டாதி","ரேவதி"]
+
 
 def find_Rasi(h):
     part_size = 360 / 12
     x = (h // part_size) %12
     x=int(x)
     st.markdown(f"<p style='font-weight: bold;'> ராசி : {Rasi[x]} </p>", unsafe_allow_html=True)
+
+def calculate_star(h, m, s):
+    total_seconds = h * 3600 + m * 60 + s
+    part_size = (360 * 3600) / 27
+    index = int(total_seconds // part_size) % 27
+    index = int(index)
+    st.markdown(f"<p style='font-weight: bold;'> நட்சத்திரம் : {star[index]} </p>", unsafe_allow_html=True)
 
 
 def calculate_time(h, m, s, h1, m1, s1, h2, m2, s2):
@@ -47,5 +56,6 @@ def calculate_and_display(selected_row_col, column_data, row_names, col_number):
 
         st.markdown(f"<p style='font-weight: bold;'>Divided by 2 - {divided_result}</p>", unsafe_allow_html=True)
         find_Rasi(new_h)
+        calculate_star(new_h, new_m, new_s)
         st.write("\n\n\n")
 
