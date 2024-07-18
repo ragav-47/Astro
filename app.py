@@ -53,6 +53,8 @@ def main():
     # Define row names as 9 planets in Tamil
     row_names = ['சூரியன்', 'சந்திரன்', 'செவ்வாய்', 'ராகு', 'குரு', 'சனி', 'புதன்', 'கேது', 'சுக்கிரன்', 'Y', 'YY']
     Rasi=['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)','கும்பம் (சனி)', 'மீனம் (குரு)']
+    star = ["அசுவினி","பரணி","கிருத்திகை","ரோகிணி","மிருகசீரிடம்","திருவாதிரை","புனர்பூசம்","பூசம்","ஆயில்யம்","மகம்","பூரம்","உத்திரம்","ஹஸ்தம்","சித்திரை","சுவாதி","விசாகம்","அனுஷம்","கேட்டை","மூலம்","பூராடம்","உத்திராடம்","திருவோணம்","அவிட்டம்","சதயம்","பூரட்டாதி","உத்திரட்டாதி","ரேவதி"]
+
     # Load saved data if a date is selected from the sidebar
     if selected_saved_date:
         column1_data, column2_data = load_data_from_firestore(db, selected_saved_date)
@@ -71,14 +73,22 @@ def main():
     h2, m2, s2 = map(int, '93:20:00'.split(':'))
     column2_data[9] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
     Rasi_1 = []
+    
     for i in range(len(row_names)):
         h, m, s = map(int, column2_data[i].split(':'))
         part_size = 360 / 12
         x = (h // part_size) % 12  # Ensure x is within 0 to 11
         x = int(x)
         Rasi_1.append(Rasi[x])
-
-    display_table(row_names, column1_data, column2_data,Rasi_1)
+    star_1=[]
+    for i in range(len(row_names)):
+        h, m, s = map(int, column2_data[i].split(':'))
+        total_seconds = h * 3600 + m * 60 + s
+        part_size = (360 * 3600) / 27
+        index = int(total_seconds // part_size) % 27
+        index = int(index)
+        star_1.append(star[index])
+    display_table(row_names, column1_data, column2_data,Rasi_1,star_1)
 
     # Save button
     if st.button('Save Data'):
@@ -107,3 +117,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
