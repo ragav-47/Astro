@@ -79,11 +79,11 @@ def main():
     st.title('ASTROLOGY CALCULATION')
 
     # Define fixed table dimensions
-    num_rows = 9
+    num_rows = 11
     num_columns = 2
 
     # Define row names as 9 planets in Tamil
-    row_names = ['சூரியன்', 'சந்திரன்', 'செவ்வாய்', 'ராகு', 'குரு', 'சனி', 'புதன்', 'கேது', 'சுக்கிரன்']
+    row_names = ['சூரியன்', 'சந்திரன்', 'செவ்வாய்', 'ராகு', 'குரு', 'சனி', 'புதன்', 'கேது', 'சுக்கிரன்','Y','YY']
 
     # Load saved data if a date is selected from the sidebar
     if selected_saved_date:
@@ -104,7 +104,33 @@ def main():
             for i in range(num_rows):
                 value = st.text_input(f'{row_names[i]}', column2_data[i], key=f'col2_row{i+1}')
                 column2_data[i] = value
+    h, m, s = map(int, column1_data[0].split(':'))
+    h1,m1,s1= map(int, column1_data[1].split(':'))
+    h2,m2,s2=map(int,'93:20:00'.split(':'))
+    # Calculate total time in seconds
+    total_seconds = (h+h1 + h2) * 3600 + (m+m1 + m2) * 60 + (s+s1 + s2)
 
+    # Calculate the Y sum of two values
+    total_hours = total_seconds // 3600
+    total_minutes = (total_seconds % 3600) // 60
+    total_seconds = total_seconds % 60
+    if total_hours>360:
+        total_hours-=360
+    column1_data[9] = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
+
+    h, m, s = map(int, column2_data[0].split(':'))
+    h1,m1,s1= map(int, column2_data[1].split(':'))
+    h2,m2,s2=map(int,'93:20:00'.split(':'))
+    # Calculate total time in seconds
+    total_seconds = (h+h1 + h2) * 3600 + (m+m1 + m2) * 60 + (s+s1 + s2)
+
+    # Calculate the Y sum of two values
+    total_hours = total_seconds // 3600
+    total_minutes = (total_seconds % 3600) // 60
+    total_seconds = total_seconds % 60
+    if total_hours>360:
+        total_hours-=360
+    column2_data[9] = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
     # Display the table
     st.write('### Table Data')
     df = pd.DataFrame({
