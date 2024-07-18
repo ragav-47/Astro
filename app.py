@@ -187,7 +187,7 @@ def main():
                 with col4:
                     h1, m1, s1 = map(int, column2_data[index_1].split(':'))
                     for i in range(num_rows):
-                        h2, m2, s2 = map(int, column1_data[i].split(':'))
+                        h2, m2, s2 = map(int, column2_data[i].split(':'))
 
                         total_seconds = (h1 + h2) * 3600 + (m1 + m2) * 60 + (s1 + s2)
 
