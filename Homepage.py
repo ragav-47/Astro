@@ -1,20 +1,9 @@
+# main.py
 import streamlit as st
-import pandas as pd
-import os
-from dotenv import load_dotenv
-from firebase_utils import initialize_firebase, save_data_to_firestore, load_data_from_firestore
-from calculations import calculate_time, calculate_and_display
+from firebase_utils import initialize_firebase
+from firebase_utils import save_data_to_firestore, load_data_from_firestore
+from calculations import calculate_time, calculate_and_display,find_Rasi,calculate_star
 from streamlit_utils import display_table, edit_table
-
-st.set_page_config(layout="wide")
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # Load Firebase credentials from Streamlit secrets
 firebase_creds = {
@@ -33,29 +22,29 @@ firebase_creds = {
 # Initialize the Firebase app with the credentials
 db = initialize_firebase(firebase_creds)
 
-# Main function for Streamlit application
 def main():
-    # Sidebar for date selection and saved data
-    with st.sidebar:
-        selected_date = st.date_input("Select a date", format="DD/MM/YYYY")
-        date_str = selected_date.strftime("%d %B %Y")
-
-        try:
-            saved_files = [doc.id for doc in db.collection('saved_data').stream()]
-        except Exception as e:
-            st.error(f"Error retrieving saved files: {e}")
-            saved_files = []
-        
-        selected_saved_date = st.selectbox("Load saved data", [""] + saved_files)
-
+    st.set_page_config(layout="wide")
+    
     st.title('ASTROLOGY CALCULATION')
+    
+    selected_date = st.date_input("Select a date", format="DD/MM/YYYY")
+    date_str = selected_date.strftime("%d %B %Y")
 
-    # Define row names as 9 planets in Tamil
+    try:
+        saved_files = [doc.id for doc in db.collection('saved_data').stream()]
+    except Exception as e:
+        st.error(f"Error retrieving saved files: {e}")
+        saved_files = []
+
+    if date_str in saved_files:
+        selected_saved_date = date_str
+    else:
+        selected_saved_date = ""
+
     row_names = ['சூரியன்', 'சந்திரன்', 'செவ்வாய்', 'ராகு', 'குரு', 'சனி', 'புதன்', 'கேது', 'சுக்கிரன்', 'Y', 'YY']
-    Rasi=['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)','கும்பம் (சனி)', 'மீனம் (குரு)']
-    star = ["அசுவினி","பரணி","கிருத்திகை","ரோகிணி","மிருகசீரிடம்","திருவாதிரை","புனர்பூசம்","பூசம்","ஆயில்யம்","மகம்","பூரம்","உத்திரம்","ஹஸ்தம்","சித்திரை","சுவாதி","விசாகம்","அனுஷம்","கேட்டை","மூலம்","பூராடம்","உத்திராடம்","திருவோணம்","அவிட்டம்","சதயம்","பூரட்டாதி","உத்திரட்டாதி","ரேவதி"]
+    Rasi = ['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)', 'கும்பம் (சனி)', 'மீனம் (குரு)']
+    star = ["அசுவினி", "பரணி", "கிருத்திகை", "ரோகிணி", "மிருகசீரிடம்", "திருவாதிரை", "புனர்பூசம்", "பூசம்", "ஆயில்யம்", "மகம்", "பூரம்", "உத்திரம்", "ஹஸ்தம்", "சித்திரை", "சுவாதி", "விசாகம்", "அனுஷம்", "கேட்டை", "மூலம்", "பூராடம்", "உத்திராடம்", "திருவோணம்", "அவிட்டம்", "சதயம்", "பூரட்டாதி", "உத்திரட்டாதி", "ரேவதி"]
 
-    # Load saved data if a date is selected from the sidebar
     if selected_saved_date:
         column1_data, column2_data = load_data_from_firestore(db, selected_saved_date)
     else:
@@ -72,15 +61,16 @@ def main():
     h1, m1, s1 = map(int, column2_data[1].split(':'))
     h2, m2, s2 = map(int, '93:20:00'.split(':'))
     column2_data[9] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
-    Rasi_1 = []
     
+    Rasi_1 = []
     for i in range(len(row_names)):
         h, m, s = map(int, column2_data[i].split(':'))
         part_size = 360 / 12
-        x = (h // part_size) % 12  # Ensure x is within 0 to 11
+        x = (h // part_size) % 12
         x = int(x)
         Rasi_1.append(Rasi[x])
-    star_1=[]
+    
+    star_1 = []
     for i in range(len(row_names)):
         h, m, s = map(int, column2_data[i].split(':'))
         total_seconds = h * 3600 + m * 60 + s
@@ -88,21 +78,22 @@ def main():
         index = int(total_seconds // part_size) % 27
         index = int(index)
         star_1.append(star[index])
-    display_table(row_names, column1_data, column2_data,Rasi_1,star_1)
+    
+    display_table(row_names, column1_data, column2_data, Rasi_1, star_1)
 
-    # Save button
+    # Save data to session_state
+    st.session_state['column1_data'] = column1_data
+    st.session_state['column2_data'] = column2_data
+    st.session_state['row_names'] = row_names
+    
     if st.button('Save Data'):
         save_data_to_firestore(db, date_str, column1_data, column2_data)
 
-    # Selection after input
-    selected_row_col1 = st.selectbox('Select from Column 1', row_names)
+    selected_row_col1 = st.selectbox('Select Row', row_names)
 
-    # Button to start calculation
     if st.button('Start Calculation'):
         try:
-            # Retrieve selected values from columns
             index_1 = row_names.index(selected_row_col1)
-
             if ':' in column1_data[index_1] and ':' in column2_data[index_1]:
                 col1, col2 = st.columns(2)
                 with col1:
@@ -111,10 +102,9 @@ def main():
                     calculate_and_display(index_1, column2_data, row_names, col_number=2)
             else:
                 st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
-
         except ValueError:
             st.write("Error: Please enter valid time values in HH:MM:SS format.")
 
+
 if __name__ == '__main__':
     main()
-
