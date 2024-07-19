@@ -59,3 +59,34 @@ def calculate_and_display(selected_row_col, column_data, row_names, col_number):
         calculate_star(new_h, new_m, new_s)
         st.write("\n\n\n")
 
+def process_and_calculate(column_data, reference_index):
+    processed_data = []
+    h_ref, m_ref, s_ref = map(int, column_data[reference_index].split(':'))
+
+    for time_str in column_data:
+        h, m, s = map(int, time_str.split(':'))
+        total_seconds = (h_ref + h) * 3600 + (m_ref + m) * 60 + (s_ref + s)
+        result_time = f"{total_seconds // 3600:02}:{(total_seconds % 3600) // 60:02}:{total_seconds % 60:02}"
+
+        h, m, s = map(int, result_time.split(':'))
+        new_h = h // 2
+        m += (h % 2) * 60
+        new_m = m // 2
+        new_s = (m % 2) * 60 + s
+        if new_s % 2 != 0:
+            new_s += 1
+        new_s //= 2
+        divided_result = f"{new_h:02}:{new_m:02}:{new_s:02}"
+        processed_data.append(divided_result)
+    
+    rasi_results = []
+    star_results = []
+    for time_str in processed_data:
+        h, m, s = map(int, time_str.split(':'))
+        total_seconds = h * 3600 + m * 60 + s
+        rasi_index = int(h // (360 / 12)) % 12
+        star_index = int(total_seconds // ((360 * 3600) / 27)) % 27
+        rasi_results.append(Rasi[rasi_index])
+        star_results.append(star[star_index])
+    
+    return processed_data, rasi_results, star_results
