@@ -4,6 +4,8 @@ from firebase_utils import initialize_firebase
 from firebase_utils import save_data_to_firestore, load_data_from_firestore
 from calculations import calculate_time, calculate_and_display,find_Rasi,calculate_star
 from streamlit_utils import display_table, edit_table
+from saps import cal_saps
+import datetime
 
 # Load Firebase credentials from Streamlit secrets
 firebase_creds = {
@@ -22,11 +24,27 @@ firebase_creds = {
 # Initialize the Firebase app with the credentials
 db = initialize_firebase(firebase_creds)
 def Home():
-    st.title('ASTROLOGY CALCULATION')
     
-    selected_date = st.date_input("Select a date", format="DD/MM/YYYY")
-    date_str = selected_date.strftime("%d %B %Y")
-
+    col1, col2 = st.columns(2)
+    with col1:
+        selected_date = st.date_input("Select a date", format="DD/MM/YYYY")
+        date_str = selected_date.strftime("%d %B %Y")
+        st.session_state.selected_date = selected_date
+    with col2:
+        if 'selected_date' in st.session_state:
+            selected_date = st.session_state.selected_date
+            selected_day = selected_date.strftime("%A")
+        else:
+            selected_day = "No date selected"
+        st.markdown(
+            f"""
+            <div style="padding: 5px; border: 1px solid #d3d3d3; border-radius: 5px; background-color: #f9f9f9; margin-top: 29px;">
+                <div style="font-size: 16px; color: #333;font-weight: bold">{selected_day}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        
     try:
         saved_files = [doc.id for doc in db.collection('saved_data').stream()]
     except Exception as e:
@@ -40,7 +58,7 @@ def Home():
 
     row_names = ['சூரியன்', 'சந்திரன்', 'செவ்வாய்', 'ராகு', 'குரு', 'சனி', 'புதன்', 'கேது', 'சுக்கிரன்', 'Y', 'YY']
     Rasi = ['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)', 'கும்பம் (சனி)', 'மீனம் (குரு)']
-    star = ["அசுவினி", "பரணி", "கிருத்திகை", "ரோகிணி", "மிருகசீரிடம்", "திருவாதிரை", "புனர்பூசம்", "பூசம்", "ஆயில்யம்", "மகம்", "பூரம்", "உத்திரம்", "ஹஸ்தம்", "சித்திரை", "சுவாதி", "விசாகம்", "அனுஷம்", "கேட்டை", "மூலம்", "பூராடம்", "உத்திராடம்", "திருவோணம்", "அவிட்டம்", "சதயம்", "பூரட்டாதி", "உத்திரட்டாதி", "ரேவதி"]
+    star = ["அசுவினி (கேது)", "பரணி (சுக்கிரன்)", "கிருத்திகை (சூரியன்)", "ரோகிணி (சந்திரன்)", "மிருகசீரிடம் (செவ்வாய்)", "திருவாதிரை (ராகு)", "புனர்பூசம் (குரு)", "பூசம் (சனி)", "ஆயில்யம் (புதன்)", "மகம் (கேது)", "பூரம் (சுக்கிரன்)", "உத்திரம் (சூரியன்)", "ஹஸ்தம் (சந்திரன்)", "சித்திரை (செவ்வாய்)", "சுவாதி (ராகு)", "விசாகம் (குரு)", "அனுஷம் (சனி)", "கேட்டை (புதன்)", "மூலம் (கேது)", "பூராடம் (சுக்கிரன்)", "உத்திராடம் (சூரியன்)", "திருவோணம் (சந்திரன்)", "அவிட்டம் (செவ்வாய்)", "சதயம் (ராகு)", "பூரட்டாதி (குரு)", "உத்திரட்டாதி (சனி)", "ரேவதி (புதன்)"]
 
     if selected_saved_date:
         column1_data, column2_data = load_data_from_firestore(db, selected_saved_date)
@@ -75,8 +93,13 @@ def Home():
         index = int(total_seconds // part_size) % 27
         index = int(index)
         star_1.append(star[index])
-    
-    display_table(row_names, column1_data, column2_data, Rasi_1, star_1)
+    saps = []
+    for i in range(len(row_names)):
+        h1, m1, s1 = map(int, column1_data[i].split(':'))
+        h2, m2, s2 = map(int, column2_data[i].split(':'))
+        saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
+        
+    display_table(row_names, column1_data, column2_data, Rasi_1, star_1,saps)
 
     # Save data to session_state
     st.session_state['column1_data'] = column1_data
