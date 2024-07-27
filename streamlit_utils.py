@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
 
-def display_table(row_names, column1_data, column2_data,Rasi,star):
+def display_table(row_names, column1_data, column2_data,Rasi,star,saps):
     df = pd.DataFrame({
         'Column 1': column1_data,
         'Column 2': column2_data,
         'ராசி':Rasi,
         'நட்சத்திரம்':star,
+        'சப்ஸ்':saps,
     }, index=row_names)
     st.table(df)
 
