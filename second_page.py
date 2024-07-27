@@ -2,12 +2,45 @@ import streamlit as st
 import pandas as pd
 from streamlit_utils import display_table
 from calculations import calculate_and_display,process_and_calculate
-
-star = ["அசுவினி", "பரணி", "கிருத்திகை", "ரோகிணி", "மிருகசீரிடம்", "திருவாதிரை", "புனர்பூசம்", "பூசம்", "ஆயில்யம்", "மகம்", "பூரம்", "உத்திரம்", "ஹஸ்தம்", "சித்திரை", "சுவாதி", "விசாகம்", "அனுஷம்", "கேட்டை", "மூலம்", "பூராடம்", "உத்திராடம்", "திருவோணம்", "அவிட்டம்", "சதயம்", "பூரட்டாதி", "உத்திரட்டாதி", "ரேவதி"]
+from saps import cal_saps
+import datetime
+star = ["அசுவினி (கேது)", "பரணி (சுக்கிரன்)", "கிருத்திகை (சூரியன்)", "ரோகிணி (சந்திரன்)", "மிருகசீரிடம் (செவ்வாய்)", "திருவாதிரை (ராகு)", "புனர்பூசம் (குரு)", "பூசம் (சனி)", "ஆயில்யம் (புதன்)", "மகம் (கேது)", "பூரம் (சுக்கிரன்)", "உத்திரம் (சூரியன்)", "ஹஸ்தம் (சந்திரன்)", "சித்திரை (செவ்வாய்)", "சுவாதி (ராகு)", "விசாகம் (குரு)", "அனுஷம் (சனி)", "கேட்டை (புதன்)", "மூலம் (கேது)", "பூராடம் (சுக்கிரன்)", "உத்திராடம் (சூரியன்)", "திருவோணம் (சந்திரன்)", "அவிட்டம் (செவ்வாய்)", "சதயம் (ராகு)", "பூரட்டாதி (குரு)", "உத்திரட்டாதி (சனி)", "ரேவதி (புதன்)"]
 Rasi = ['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)', 'கும்பம் (சனி)', 'மீனம் (குரு)']
 
 def second():
-    st.title('Second Page')
+    # st.title('Second Page')
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if 'selected_date' in st.session_state:
+            selected_date = st.session_state.selected_date
+            selected_date_str = selected_date.strftime("%d/%m/%Y")
+        else:
+            selected_day = "No date selected"
+        st.markdown(
+            f"""
+            <div style="padding: 5px; border: 1px solid #d3d3d3; border-radius: 5px; background-color: #f9f9f9; margin-top: 29px; margin-bottom: 20px">
+                <div style="font-size: 16px; color: #333; font-weight: bold">{selected_date_str}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    
+    with col2:
+        if 'selected_date' in st.session_state:
+            selected_date = st.session_state.selected_date
+            selected_day = selected_date.strftime("%A")
+        else:
+            selected_day = "No date selected"
+        st.markdown(
+            f"""
+            <div style="padding: 5px; border: 1px solid #d3d3d3; border-radius: 5px; background-color: #f9f9f9; margin-top: 29px;margin-bottom: 20px">
+                <div style="font-size: 16px; color: #333; font-weight: bold">{selected_day}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
     if 'column1_data' in st.session_state and 'column2_data' in st.session_state:
         column1_data = st.session_state['column1_data']
         column2_data = st.session_state['column2_data']
@@ -15,8 +48,12 @@ def second():
         
         column1_processed, rasi1, star1 = process_and_calculate(column1_data, 10)
         column2_processed, rasi2, star2 = process_and_calculate(column2_data, 10)
-        
-        display_table(row_names, column1_processed, column2_processed, rasi2, star2)
+        saps = []
+        for i in range(len(row_names)):
+            h1, m1, s1 = map(int, column1_processed[i].split(':'))
+            h2, m2, s2 = map(int, column2_processed[i].split(':'))
+            saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
+        display_table(row_names, column1_processed, column2_processed, rasi2, star2,saps)
         # st.write(column1_data[5])
         selected_row_col1 = st.selectbox('Select Row', row_names)
         if st.button('Start Calculation'):
