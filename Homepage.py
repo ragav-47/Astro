@@ -87,12 +87,24 @@ def Home():
     
     star_1 = []
     for i in range(len(row_names)):
-        h, m, s = map(int, column2_data[i].split(':'))
-        total_seconds = h * 3600 + m * 60 + s
+        h1, m1, s1 = map(int, column1_data[i].split(':'))
+        h2, m2, s2 = map(int, column2_data[i].split(':'))
+
+        total_seconds_1 = h1 * 3600 + m1 * 60 + s1
+        total_seconds_2 = h2 * 3600 + m2 * 60 + s2
+
         part_size = (360 * 3600) / 27
-        index = int(total_seconds // part_size) % 27
-        index = int(index)
-        star_1.append(star[index])
+        index_1 = int(total_seconds_1 // part_size) % 27
+        index_2 = int(total_seconds_2 // part_size) % 27
+
+        # Use a list to store stars for each row
+        temp = [star[index_1]]
+        if index_1 != index_2:
+            temp.append(star[index_2])
+        star_1.append(temp)
+    # Flatten star_1 for DataFrame creation
+    star_1_flat = ["  &  ".join(stars) for stars in star_1]
+
     
         
         
@@ -102,7 +114,7 @@ def Home():
         h2, m2, s2 = map(int, column2_data[i].split(':'))
         saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
     
-    display_table(row_names, column1_data, column2_data, Rasi_1, star_1,saps)
+    display_table(row_names, column1_data, column2_data, Rasi_1, star_1_flat,saps)
 
     # Save data to session_state
     st.session_state['column1_data'] = column1_data
