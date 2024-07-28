@@ -53,8 +53,15 @@ def second():
             h1, m1, s1 = map(int, column1_processed[i].split(':'))
             h2, m2, s2 = map(int, column2_processed[i].split(':'))
             saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
+
+        stars_combined = []
+        for i in range(len(row_names)):
+            if star1[i] != star2[i]:
+                stars_combined.append(f"{star1[i]} & {star2[i]}")
+            else:
+                stars_combined.append(star1[i])
         
-        display_table(row_names, column1_processed, column2_processed, rasi2, star2,saps)
+        display_table(row_names, column1_processed, column2_processed, rasi2, stars_combined,saps)
         # st.write(column1_data[5])
         selected_row_col1 = st.selectbox('Select Row', row_names)
         if st.button('Start Calculation'):
