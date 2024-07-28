@@ -1,14 +1,25 @@
 import streamlit as st
 import pandas as pd
 
-def display_table(row_names, column1_data, column2_data,Rasi,star,saps):
+def format_saps(saps):
+    formatted_saps = []
+    for sap in saps:
+        formatted_lines = [f"{key} - {value}" for key, value in sap.items()]
+        formatted_saps.append(" , ".join(formatted_lines))
+    return formatted_saps
+
+def display_table(row_names, column1_data, column2_data, Rasi, star, saps):
+    formatted_saps = format_saps(saps)
+    
     df = pd.DataFrame({
         'Column 1': column1_data,
         'Column 2': column2_data,
-        'ராசி':Rasi,
-        'நட்சத்திரம்':star,
-        'சப்ஸ்':saps,
+        'ராசி': Rasi,
+        'நட்சத்திரம்': star,
+        'சப்ஸ்': formatted_saps,
     }, index=row_names)
+    
+    # Display the DataFrame as a table
     st.table(df)
 
 def edit_table(row_names, column1_data, column2_data):
