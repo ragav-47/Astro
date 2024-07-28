@@ -53,6 +53,7 @@ def second():
             h1, m1, s1 = map(int, column1_processed[i].split(':'))
             h2, m2, s2 = map(int, column2_processed[i].split(':'))
             saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
+        
         display_table(row_names, column1_processed, column2_processed, rasi2, star2,saps)
         # st.write(column1_data[5])
         selected_row_col1 = st.selectbox('Select Row', row_names)
