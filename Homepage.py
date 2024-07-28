@@ -93,12 +93,15 @@ def Home():
         index = int(total_seconds // part_size) % 27
         index = int(index)
         star_1.append(star[index])
+    
+        
+        
     saps = []
     for i in range(len(row_names)):
         h1, m1, s1 = map(int, column1_data[i].split(':'))
         h2, m2, s2 = map(int, column2_data[i].split(':'))
         saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
-        
+    
     display_table(row_names, column1_data, column2_data, Rasi_1, star_1,saps)
 
     # Save data to session_state
