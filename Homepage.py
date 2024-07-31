@@ -66,7 +66,8 @@ def Home():
         column1_data, column2_data = ['00:00:00'] * len(row_names), ['00:00:00'] * len(row_names)
 
     column1_data, column2_data = edit_table(row_names, column1_data, column2_data)
-
+    
+    # Y calculation
     h, m, s = map(int, column1_data[0].split(':'))
     h1, m1, s1 = map(int, column1_data[1].split(':'))
     h2, m2, s2 = map(int, '93:20:00'.split(':'))
@@ -76,6 +77,7 @@ def Home():
     h1, m1, s1 = map(int, column2_data[1].split(':'))
     h2, m2, s2 = map(int, '93:20:00'.split(':'))
     column2_data[9] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
+    # YY Calculation
     
     Rasi_1 = []
     for i in range(len(row_names)):
@@ -105,14 +107,41 @@ def Home():
     # Flatten star_1 for DataFrame creation
     star_1_flat = ["  &  ".join(stars) for stars in star_1]
 
-    
-        
-        
+    # if len(star_1_flat) > 1:  # Ensure there are at least two elements in the list
+    #     if len(star_1_flat[-2].split("  &  ")) == 2:
+    #         print("The second-to-last element contains two stars:", star_1_flat[-2])
+    #     else:
+    #         planet = star_1_flat[-2].split('(')[-1].split(')')[0]
+    #         print(planet)
+
+    #         # Find the index of the corresponding row in row_names
+    #         try:
+    #             planet_index = row_names.index(planet)
+                
+    #             # Retrieve values from column1_data and column2_data
+    #             planet_time_col1 = column1_data[planet_index]
+    #             planet_time_col2 = column2_data[planet_index]
+    #             print(planet_index,planet_time_col1,planet_time_col2)
+
+    #             h, m, s = map(int, column1_data[9].split(':'))
+    #             h1, m1, s1 = map(int, planet_time_col1.split(':'))
+    #             h2, m2, s2 = map(int, '00:00:00'.split(':'))
+    #             column1_data[10] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
+    #             print(column2_data[10])
+    #             h, m, s = map(int, column2_data[9].split(':'))
+    #             h1, m1, s1 = map(int, planet_time_col2.split(':'))
+    #             h2, m2, s2 = map(int, '00:00:00'.split(':'))
+    #             column1_data[10] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
+                
+
+    #         except ValueError:
+    #             st.error(f"Planet {planet} not found in row names.")
+
     saps = []
     for i in range(len(row_names)):
         h1, m1, s1 = map(int, column1_data[i].split(':'))
         h2, m2, s2 = map(int, column2_data[i].split(':'))
-        saps.append(cal_saps(h1, m1, s1,h2, m2, s2))
+        saps.append(cal_saps(h1, m1, s1,h2, m2, s2,360))
     
     display_table(row_names, column1_data, column2_data, Rasi_1, star_1_flat,saps)
 

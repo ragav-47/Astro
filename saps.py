@@ -12,9 +12,9 @@ model = {
     'புதன்': 17
 }
 
-def calculate_star(h, m, s):
+def calculate_star(h, m, s,part):
     total_seconds = h * 3600 + m * 60 + s
-    part_size = (360 * 3600) / 27
+    part_size = (part * 3600) / 27
     index = int(total_seconds // part_size) % 27
     return star[index]
 
@@ -36,7 +36,7 @@ def convert_seconds_to_hms(seconds):
 
 
 
-def cal_saps(h1, m1, s1, h2, m2, s2):
+def cal_saps(h1, m1, s1, h2, m2, s2,part):
     out_with_time = {}
     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
@@ -44,22 +44,25 @@ def cal_saps(h1, m1, s1, h2, m2, s2):
     div=0
     if diff != 0:
         div = 390 * 60 / diff
-    star_1 = calculate_star(h1, m1, s1)
+    star_1 = calculate_star(h1, m1, s1,part)
     var = star_1.split('(')[-1].split(')')[0]
     start_index = list(model.keys()).index(var)
-    part_size = (360 * 3600) / 27
+    part_size = (part * 3600) / 27
     sub = start_index * part_size
 
     keys = list(model.keys())
     index = start_index
     initial_index = start_index
-    print(total_seconds_1, total_seconds_2)
+    
     time = 32400  # Start at 9:00 AM
     prev_sub = total_seconds_1
 
     while True:
         key = keys[index]
-        mod = int(800 / 2 * model[key])
+        if part==360:
+            mod = int(800 / 2 * model[key])
+        else:
+            mod = int(80 / 2 * model[key])
         sub += mod
         
         if sub >= total_seconds_1:

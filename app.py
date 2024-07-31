@@ -2,6 +2,8 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from Homepage import Home
 from second_page import second
+from third_page import third
+
 def main():
     st.set_page_config(layout="wide")
     hide_st_style = """
@@ -26,7 +28,7 @@ def main():
 
     selected = option_menu(
         None, 
-        ["Home", "Second Page"],  
+        ["Home", "Second Page","Third Page"],  
         menu_icon="cast", 
         default_index=0, 
         orientation="horizontal",
@@ -44,6 +46,8 @@ def main():
         Home()
     elif selected == "Second Page":
         second()
+    elif selected == "Third Page":
+        third()
 
 
 if __name__ == '__main__':
