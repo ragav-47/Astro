@@ -1,15 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-def format_saps(saps):
-    formatted_saps = []
-    for sap in saps:
-        formatted_lines = [f"{key} - {value}" for key, value in sap.items()]
-        formatted_saps.append(" , ".join(formatted_lines))
-    return formatted_saps
 
 def display_table(row_names, column1_data, column2_data, Rasi, star, saps):
-    formatted_saps = format_saps(saps)
+    formatted_saps = [' , '.join(sublist) for sublist in saps]
     
     df = pd.DataFrame({
         'Column 1': column1_data,
