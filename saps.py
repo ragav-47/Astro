@@ -37,7 +37,7 @@ def convert_seconds_to_hms(seconds):
 
 
 def cal_saps(h1, m1, s1, h2, m2, s2,part):
-    out_with_time = {}
+    out_with_time = []
     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
     diff = total_seconds_2 - total_seconds_1
@@ -70,7 +70,7 @@ def cal_saps(h1, m1, s1, h2, m2, s2,part):
             # print(sub)
             time += div * (sub - prev_sub)
             time_str = convert_seconds_to_hms(time)
-            out_with_time[key] = time_str
+            out_with_time.append(f"{key}: {time_str}")
             
             # Update prev_sub to the current sub
             prev_sub = sub
