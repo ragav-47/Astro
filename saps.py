@@ -91,19 +91,18 @@ def calculate_section(total_seconds):
     section_length = 3 * 3600  # Each section is 3 hours long (10800 seconds)
     return (total_seconds // section_length)+1
 
-def cal_saps3(h1, m1, s1, h2, m2, s2, part):
+def cal_saps(h1, m1, s1, h2, m2, s2, part):
     out_with_time = []
 
     # Convert input times to total seconds.
     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
-    diff = total_seconds_2 - total_seconds_1
-    if diff<0:
-        diff *=-1
+    diff = abs(total_seconds_2 - total_seconds_1)
+    
     section1 = calculate_section(total_seconds_1)
     section2 = calculate_section(total_seconds_2)
     # print(f"Sections: {section1}, {section2}")
-
+    # print(total_seconds_1,total_seconds_2)
     # Calculate the division factor if time difference is not zero.
     div = 390 * 60 / diff if diff != 0 else 0
     
@@ -116,7 +115,7 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
     part_size = (part * 3600) / 27
     # sub = start_index * part_size
     sub= star.index(star_1)*part_size
-    # print(sub)
+    
     keys = list(model.keys())
     index = start_index
     initial_index = start_index
@@ -131,26 +130,27 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
         # Calculate the modifier based on the part value.
         mod = int((80 if part != 360 else 800) / 2 * model[key])
         sub += mod
-        # print(sub)
+        
         # Ensure sub does not exceed the time frame
         
 
-        # print(f"Index: {index}, Key: {key}, Sub: {sub}, Prev Sub: {prev_sub}")
+        # print(f"Index: {index}, Key: {key}, Sub: {sub}, Prev Sub: {prev_sub}, mod : {mod}")
 
         # Check if the sub value falls within the correct hour boundaries.
         if section1 != section2:
             if (total_seconds_1 <= sub <= section1 * 10800) or ((section2 - 1) * 10800 <= sub <= total_seconds_2):
-                if sub > total_seconds_2 and count>1:
+                if sub > total_seconds_2 and count>2:
+                    
                     break
                 # Calculate the time for the current star.
                 time += div * (sub - prev_sub)
                 time_str = convert_seconds_to_hms(time)
                 out_with_time.append(f"{key}: {time_str}")
-
+                
                 # Update previous sub value.
                 prev_sub = sub
             elif(sub>section1*10800 and count==1):
-                # print("second star",sub)
+                
                 
                 part_size = (part * 3600) / 27
                 ind = int(sub // part_size) % 27
@@ -160,16 +160,23 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
                 index = list(model.keys()).index(initial_star)
                 # print(star2,index,key)
                 count+=1
-            else:
-                if sub > total_seconds_2 and count>1:
-                    break
                 continue
+            else:
+                if sub <= section2*10800:
+                    time += div * (sub - prev_sub)
+                    time_str = convert_seconds_to_hms(time)
+                    out_with_time.append(f"{key}: {time_str}")
+                    
+                if sub > total_seconds_2 and count>1:
+                    
+                    break
+                
         else:
             if sub > total_seconds_2:
                     break
-            if sub >= total_seconds_1:
+            elif sub >= total_seconds_1:
                 
-                # print(f"Valid Sub (same section): {sub}, Key: {key}")
+                
                 # Calculate the time for the current star.
                 time += div * (sub - prev_sub)
                 time_str = convert_seconds_to_hms(time)
@@ -178,13 +185,12 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
                 # Update previous sub value.
                 prev_sub = sub
             
-
-        # Update the index and handle wrapping around.s
         index = (index + 1) % len(keys)
+        
         if index == initial_index:
             initial_index = (initial_index + 1) % len(keys)
             index = initial_index
-        # print("Out index: ",index,key)
+        
         
 
     return out_with_time
