@@ -139,7 +139,7 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
         # Check if the sub value falls within the correct hour boundaries.
         if section1 != section2:
             if (total_seconds_1 <= sub <= section1 * 10800) or ((section2 - 1) * 10800 <= sub <= total_seconds_2):
-                if sub > total_seconds_2 and count>2:
+                if sub > total_seconds_2 and count>1:
                     
                     break
                 # Calculate the time for the current star.
@@ -162,7 +162,7 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
                 count+=1
                 continue
             else:
-                if sub <= section2*10800:
+                if sub <= section2*10800 and count>1:
                     time += div * (sub - prev_sub)
                     time_str = convert_seconds_to_hms(time)
                     out_with_time.append(f"{key}: {time_str}")
