@@ -55,7 +55,7 @@ def cal_saps(h1, m1, s1, h2, m2, s2,part):
     index = start_index
     initial_index = start_index
     
-    time = 9*3600  # Start at 9:00 AM
+    time = 51000  # Start at 9:00 AM
     prev_sub = total_seconds_1
 
     while True:
@@ -98,23 +98,25 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
     diff = total_seconds_2 - total_seconds_1
-
+    if diff<0:
+        diff *=-1
     section1 = calculate_section(total_seconds_1)
     section2 = calculate_section(total_seconds_2)
     # print(f"Sections: {section1}, {section2}")
 
     # Calculate the division factor if time difference is not zero.
     div = 390 * 60 / diff if diff != 0 else 0
-
+    
     # Get initial star and its index.
     star_1 = calculate_star(h1, m1, s1, part)
     initial_star = star_1.split('(')[-1].split(')')[0]
     start_index = list(model.keys()).index(initial_star)
-
+    # print(div,star_1,initial_star,start_index)
     # Calculate part size.
     part_size = (part * 3600) / 27
-    sub = start_index * part_size
-
+    # sub = start_index * part_size
+    sub= star.index(star_1)*part_size
+    # print(sub)
     keys = list(model.keys())
     index = start_index
     initial_index = start_index
@@ -122,7 +124,9 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
     time = 9 * 3600  # Start at 9:00 AM
     prev_sub = total_seconds_1
     count=1
+    i=1
     while True:
+        i+=1
         key = keys[index]
 
         # Calculate the modifier based on the part value.
@@ -130,15 +134,15 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
         sub += mod
         # print(sub)
         # Ensure sub does not exceed the time frame
-        if sub > total_seconds_2:
-            break
+        
 
         # print(f"Index: {index}, Key: {key}, Sub: {sub}, Prev Sub: {prev_sub}")
 
         # Check if the sub value falls within the correct hour boundaries.
         if section1 != section2:
             if (total_seconds_1 <= sub <= section1 * 10800) or ((section2 - 1) * 10800 <= sub <= total_seconds_2):
-                
+                if sub > total_seconds_2 and count>1:
+                    break
                 # Calculate the time for the current star.
                 time += div * (sub - prev_sub)
                 time_str = convert_seconds_to_hms(time)
@@ -157,11 +161,12 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
                 index = list(model.keys()).index(initial_star)
                 # print(star2,index,key)
                 count+=1
-                
-            else:
-                continue
+            # else:
+            #     continue
         else:
             if sub >= total_seconds_1:
+                if sub > total_seconds_2:
+                    break
                 # print(f"Valid Sub (same section): {sub}, Key: {key}")
                 # Calculate the time for the current star.
                 time += div * (sub - prev_sub)
@@ -170,8 +175,8 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
 
                 # Update previous sub value.
                 prev_sub = sub
-            else:
-                continue
+            # else:
+            #     continue
 
         # Update the index and handle wrapping around.s
         index = (index + 1) % len(keys)
