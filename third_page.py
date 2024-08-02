@@ -14,7 +14,7 @@ def process(column_data):
     for i in range(len(column_data)):
         h,m,s= map(int, column_data[i].split(':'))
         h=(h//30)*3+(h%30)
-        if h>36:
+        if h>=36:
             h-=36
         result = f"{h:02}:{m:02}:{s:02}"
         processed_data.append(result)
