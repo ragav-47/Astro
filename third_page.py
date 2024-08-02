@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from streamlit_utils import display_table
-from saps import cal_saps
+from saps import cal_saps3
 from calculations import process_and_calculate
 
 Rasi=['மேஷம் (செவ்வாய்)', 'ரிஷபம் (சுக்கிரன்)', 'மிதுனம் (புதன்)', 'கடகம் (சந்திரன்)', 'சிம்மம் (சூரியன்)', 'கன்னி (புதன்)', 'துலாம் (சுக்கிரன்)', 'விருச்சிகம் (செவ்வாய்)', 'தனுசு (குரு)', 'மகரம் (சனி)','கும்பம் (சனி)', 'மீனம் (குரு)']
@@ -82,7 +82,7 @@ def third():
         for i in range(len(row_names)):
             h1, m1, s1 = map(int, column1_pro[i].split(':'))
             h2, m2, s2 = map(int, column2_pro[i].split(':'))
-            saps.append(cal_saps(h1, m1, s1,h2, m2, s2,36))
+            saps.append(cal_saps3(h1, m1, s1,h2, m2, s2,36))
 
         Rasi_combined=[]
         for i in range(len(row_names)):
