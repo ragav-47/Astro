@@ -40,7 +40,7 @@ def third():
             selected_date = st.session_state.selected_date
             selected_date_str = selected_date.strftime("%d/%m/%Y")
         else:
-            selected_day = "No date selected"
+            selected_date_str = "No date selected"  # Define the variable here
         st.markdown(
             f"""
             <div style="padding: 5px; border: 1px solid #d3d3d3; border-radius: 5px; background-color: #f9f9f9; margin-top: 29px; margin-bottom: 20px">
