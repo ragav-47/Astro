@@ -55,7 +55,7 @@ def cal_saps(h1, m1, s1, h2, m2, s2,part):
     index = start_index
     initial_index = start_index
     
-    time = 51000  # Start at 9:00 AM
+    time = 9*3600  # Start at 9:00 AM
     prev_sub = total_seconds_1
 
     while True:
