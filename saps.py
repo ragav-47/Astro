@@ -91,7 +91,7 @@ def calculate_section(total_seconds):
     section_length = 3 * 3600  # Each section is 3 hours long (10800 seconds)
     return (total_seconds // section_length)+1
 
-def cal_saps(h1, m1, s1, h2, m2, s2, part):
+def cal_saps3(h1, m1, s1, h2, m2, s2, part):
     out_with_time = []
 
     # Convert input times to total seconds.
