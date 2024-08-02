@@ -99,7 +99,7 @@ def third():
                 if (idx2-idx1)==1:
                     stars_combined.append(f"{star1[i]} & {star2[i]}")
                 else:
-                    stars_combined.append(f"{star1[i]} & {star[idx1+1]} & {star2[i]}")
+                    stars_combined.append(f"{star1[i]} & {star[idx2-1]} & {star2[i]}")
             else:
                 stars_combined.append(star1[i])
         
