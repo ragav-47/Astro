@@ -126,7 +126,6 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
     count=1
     i=1
     while True:
-        i+=1
         key = keys[index]
 
         # Calculate the modifier based on the part value.
@@ -161,12 +160,15 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
                 index = list(model.keys()).index(initial_star)
                 # print(star2,index,key)
                 count+=1
-            # else:
-            #     continue
-        else:
-            if sub >= total_seconds_1:
-                if sub > total_seconds_2:
+            else:
+                if sub > total_seconds_2 and count>1:
                     break
+                continue
+        else:
+            if sub > total_seconds_2:
+                    break
+            if sub >= total_seconds_1:
+                
                 # print(f"Valid Sub (same section): {sub}, Key: {key}")
                 # Calculate the time for the current star.
                 time += div * (sub - prev_sub)
@@ -175,8 +177,7 @@ def cal_saps3(h1, m1, s1, h2, m2, s2, part):
 
                 # Update previous sub value.
                 prev_sub = sub
-            # else:
-            #     continue
+            
 
         # Update the index and handle wrapping around.s
         index = (index + 1) % len(keys)
