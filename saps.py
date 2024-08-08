@@ -42,6 +42,8 @@ def cal_saps(h1, m1, s1, h2, m2, s2,part):
     
     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
     diff = total_seconds_2 - total_seconds_1
+    if diff<0:
+        diff+=part
     div=0
     if diff != 0:
         div = 390 * 60 / diff
