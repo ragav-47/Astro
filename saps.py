@@ -38,12 +38,16 @@ def convert_seconds_to_hms(seconds):
 
 def cal_saps(h1, m1, s1, h2, m2, s2,part):
     out_with_time = []
+    if h1>350 and h2<10:
+        h2+=360
     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
     
     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
-    diff = total_seconds_2 - total_seconds_1
-    if diff<0:
-        diff+=part
+    diff = abs(total_seconds_2 - total_seconds_1)
+    
+    # if diff<0:
+    #     diff=360+diff
+    
     div=0
     if diff != 0:
         div = 390 * 60 / diff
