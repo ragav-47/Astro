@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from streamlit_utils import display_table
-from calculations import calculate_and_display,process_and_calculate
+from calculations import calculate_and_table,process_and_calculate
 from saps import cal_saps
 import datetime
 star = ["அசுவினி (கேது)", "பரணி (சுக்கிரன்)", "கிருத்திகை (சூரியன்)", "ரோகிணி (சந்திரன்)", "மிருகசீரிடம் (செவ்வாய்)", "திருவாதிரை (ராகு)", "புனர்பூசம் (குரு)", "பூசம் (சனி)", "ஆயில்யம் (புதன்)", "மகம் (கேது)", "பூரம் (சுக்கிரன்)", "உத்திரம் (சூரியன்)", "ஹஸ்தம் (சந்திரன்)", "சித்திரை (செவ்வாய்)", "சுவாதி (ராகு)", "விசாகம் (குரு)", "அனுஷம் (சனி)", "கேட்டை (புதன்)", "மூலம் (கேது)", "பூராடம் (சுக்கிரன்)", "உத்திராடம் (சூரியன்)", "திருவோணம் (சந்திரன்)", "அவிட்டம் (செவ்வாய்)", "சதயம் (ராகு)", "பூரட்டாதி (குரு)", "உத்திரட்டாதி (சனி)", "ரேவதி (புதன்)"]
@@ -69,11 +69,7 @@ def second():
             try:
                 index_1 = row_names.index(selected_row_col1)
                 if ':' in column1_processed[index_1] and ':' in column2_processed[index_1]:
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        calculate_and_display(index_1, column1_processed, row_names, col_number=1)
-                    with col2:
-                        calculate_and_display(index_1, column2_processed, row_names, col_number=2)
+                    calculate_and_table(index_1,column1_data,column2_data,row_names)
                 else:
                     st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
             except ValueError:
