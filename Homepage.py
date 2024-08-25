@@ -2,7 +2,7 @@
 import streamlit as st
 from firebase_utils import initialize_firebase
 from firebase_utils import save_data_to_firestore, load_data_from_firestore
-from calculations import calculate_time, calculate_and_display,find_Rasi,calculate_star
+from calculations import calculate_time, calculate_and_table
 from streamlit_utils import display_table, edit_table
 from saps import cal_saps
 import datetime
@@ -107,36 +107,7 @@ def Home():
     # Flatten star_1 for DataFrame creation
     star_1_flat = ["  &  ".join(stars) for stars in star_1]
 
-    # if len(star_1_flat) > 1:  # Ensure there are at least two elements in the list
-    #     if len(star_1_flat[-2].split("  &  ")) == 2:
-    #         print("The second-to-last element contains two stars:", star_1_flat[-2])
-    #     else:
-    #         planet = star_1_flat[-2].split('(')[-1].split(')')[0]
-    #         print(planet)
-
-    #         # Find the index of the corresponding row in row_names
-    #         try:
-    #             planet_index = row_names.index(planet)
-                
-    #             # Retrieve values from column1_data and column2_data
-    #             planet_time_col1 = column1_data[planet_index]
-    #             planet_time_col2 = column2_data[planet_index]
-    #             print(planet_index,planet_time_col1,planet_time_col2)
-
-    #             h, m, s = map(int, column1_data[9].split(':'))
-    #             h1, m1, s1 = map(int, planet_time_col1.split(':'))
-    #             h2, m2, s2 = map(int, '00:00:00'.split(':'))
-    #             column1_data[10] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
-    #             print(column2_data[10])
-    #             h, m, s = map(int, column2_data[9].split(':'))
-    #             h1, m1, s1 = map(int, planet_time_col2.split(':'))
-    #             h2, m2, s2 = map(int, '00:00:00'.split(':'))
-    #             column1_data[10] = calculate_time(h, m, s, h1, m1, s1, h2, m2, s2)
-                
-
-    #         except ValueError:
-    #             st.error(f"Planet {planet} not found in row names.")
-
+    
     saps = []
     for i in range(len(row_names)):
         h1, m1, s1 = map(int, column1_data[i].split(':'))
@@ -159,11 +130,7 @@ def Home():
         try:
             index_1 = row_names.index(selected_row_col1)
             if ':' in column1_data[index_1] and ':' in column2_data[index_1]:
-                col1, col2 = st.columns(2)
-                with col1:
-                    calculate_and_display(index_1, column1_data, row_names, col_number=1)
-                with col2:
-                    calculate_and_display(index_1, column2_data, row_names, col_number=2)
+                calculate_and_table(index_1,column1_data,column2_data,row_names)
             else:
                 st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
         except ValueError:
