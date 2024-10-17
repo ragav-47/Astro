@@ -51,57 +51,112 @@ def cal_div(column1,column2):
     new_s //= 2
     divided_result = f"{new_h:02}:{new_m:02}:{new_s:02}"
     return divided_result
-def calculate_company(number,selected_company,column1_data,column2_data):
-    if number>10:
-        num1,num2=number//10,number%10
-        column1 = cal_div(column1_data[num1-1],column1_data[num2-1])
-        column2 = cal_div(column2_data[num1-1],column2_data[num2-1])
-    else:
-        column1 = column1_data[number-1]
-        column2 = column2_data[number-1]
+# def calculate_company(number,selected_company,column1_data,column2_data):
+#     if number>10:
+#         num1,num2=number//10,number%10
+#         column1 = cal_div(column1_data[num1-1],column1_data[num2-1])
+#         column2 = cal_div(column2_data[num1-1],column2_data[num2-1])
+#     else:
+#         column1 = column1_data[number-1]
+#         column2 = column2_data[number-1]
     
-    Rasi_1 = []
-    h, m, s = map(int, column2.split(':'))
-    part_size = 360 / 12
-    x = (h // part_size) % 12
-    x = int(x)
-    Rasi_1.append(Rasi[x])
+#     Rasi_1 = []
+#     h, m, s = map(int, column2.split(':'))
+#     part_size = 360 / 12
+#     x = (h // part_size) % 12
+#     x = int(x)
+#     Rasi_1.append(Rasi[x])
     
-    star_1 = []
-    h1, m1, s1 = map(int, column1.split(':'))
-    h2, m2, s2 = map(int, column2.split(':'))
+#     star_1 = []
+#     h1, m1, s1 = map(int, column1.split(':'))
+#     h2, m2, s2 = map(int, column2.split(':'))
 
-    total_seconds_1 = h1 * 3600 + m1 * 60 + s1
-    total_seconds_2 = h2 * 3600 + m2 * 60 + s2
+#     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
+#     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
 
-    part_size = (360 * 3600) / 27
-    index_1 = int(total_seconds_1 // part_size) % 27
-    index_2 = int(total_seconds_2 // part_size) % 27
+#     part_size = (360 * 3600) / 27
+#     index_1 = int(total_seconds_1 // part_size) % 27
+#     index_2 = int(total_seconds_2 // part_size) % 27
 
-    # Use a list to store stars for each row
-    temp = [star[index_1]]
-    if index_1 != index_2:
-        temp.append(star[index_2])
-    star_1.append(temp)
-    # Flatten star_1 for DataFrame creation
-    star_1_flat = ["  &  ".join(stars) for stars in star_1]
+#     # Use a list to store stars for each row
+#     temp = [star[index_1]]
+#     if index_1 != index_2:
+#         temp.append(star[index_2])
+#     star_1.append(temp)
+#     # Flatten star_1 for DataFrame creation
+#     star_1_flat = ["  &  ".join(stars) for stars in star_1]
     
-    saps = []
-    h1, m1, s1 = map(int, column1.split(':'))
-    h2, m2, s2 = map(int, column2.split(':'))
-    saps.append(cal_saps(h1, m1, s1,h2, m2, s2,360))
-    formatted_saps = [' , '.join(sublist) for sublist in saps]
+#     saps = []
+#     h1, m1, s1 = map(int, column1.split(':'))
+#     h2, m2, s2 = map(int, column2.split(':'))
+#     saps.append(cal_saps(h1, m1, s1,h2, m2, s2,360))
+#     formatted_saps = [' , '.join(sublist) for sublist in saps]
     
-    df = pd.DataFrame({
-        'Column 1': column1,
-        'Column 2': column2,
-        'ராசி': Rasi_1,
-        'நட்சத்திரம்': star_1_flat,
-        'சப்ஸ்': formatted_saps,
-    }, index=[selected_company])
+#     df = pd.DataFrame({
+#         'Column 1': column1,
+#         'Column 2': column2,
+#         'ராசி': Rasi_1,
+#         'நட்சத்திரம்': star_1_flat,
+#         'சப்ஸ்': formatted_saps,
+#     }, index=[selected_company])
     
-    # Display the DataFrame as a table
-    st.table(df)
+#     # Display the DataFrame as a table
+#     st.table(df)
+def calculate_companies(column1_data, column2_data,company):
+    results = []
+
+    for selected_company,number in company.items():
+        
+        if number > 10:
+            num1, num2 = number // 10, number % 10
+            column1 = cal_div(column1_data[num1-1], column1_data[num2-1])
+            column2 = cal_div(column2_data[num1-1], column2_data[num2-1])
+        else:
+            column1 = column1_data[number-1]
+            column2 = column2_data[number-1]
+
+        Rasi_1 = []
+        h, m, s = map(int, column2.split(':'))
+        part_size = 360 / 12
+        x = (h // part_size) % 12
+        x = int(x)
+        Rasi_1.append(Rasi[x])
+
+        star_1 = []
+        h1, m1, s1 = map(int, column1.split(':'))
+        h2, m2, s2 = map(int, column2.split(':'))
+
+        total_seconds_1 = h1 * 3600 + m1 * 60 + s1
+        total_seconds_2 = h2 * 3600 + m2 * 60 + s2
+
+        part_size = (360 * 3600) / 27
+        index_1 = int(total_seconds_1 // part_size) % 27
+        index_2 = int(total_seconds_2 // part_size) % 27
+
+        # Use a list to store stars for each row
+        temp = [star[index_1]]
+        if index_1 != index_2:
+            temp.append(star[index_2])
+        star_1.append(temp)
+        # Flatten star_1 for DataFrame creation
+        star_1_flat = ["  &  ".join(stars) for stars in star_1]
+
+        saps = []
+        h1, m1, s1 = map(int, column1.split(':'))
+        h2, m2, s2 = map(int, column2.split(':'))
+        saps.append(cal_saps(h1, m1, s1, h2, m2, s2, 360))
+        formatted_saps = [' , '.join(sublist) for sublist in saps]
+
+        results.append({
+            'Company': selected_company,
+            'Column 1': column1,
+            'Column 2': column2,
+            'ராசி': Rasi_1,
+            'நட்சத்திரம்': star_1_flat,
+            'சப்ஸ்': formatted_saps,
+        })
+    
+    return results
 def Home():
     
     col1, col2 = st.columns(2)
@@ -225,24 +280,31 @@ def Home():
         "SBI BANK":3,"TATA POWER":3,
         "GRASSIM":6
         }
-    
+    # Calculate for all companies
+    results = calculate_companies(column1_data, column2_data,company)
 
-    selected_company = st.selectbox('Select Row', company.keys())
+    # Display the results in a DataFrame
+    if results:
+        df = pd.DataFrame(results)
+        st.table(df)
 
+
+    # selected_company = st.selectbox('Select Row', company.keys())
+
+    # # if st.button('Start Calculation'):
+    # #     try:
+    # #         index_1 = row_names.index(selected_row_col1)
+    # #         if ':' in column1_data[index_1] and ':' in column2_data[index_1]:
+    # #             # calculate_and_table(index_1,column1_data,column2_data,row_names)
+    # #             calculate_company()
+    # #         else:
+    # #             st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
+    # #     except ValueError:
+    # #         st.write("Error: Please enter valid time values in HH:MM:SS format.")
     # if st.button('Start Calculation'):
-    #     try:
-    #         index_1 = row_names.index(selected_row_col1)
-    #         if ':' in column1_data[index_1] and ':' in column2_data[index_1]:
-    #             # calculate_and_table(index_1,column1_data,column2_data,row_names)
-    #             calculate_company()
-    #         else:
-    #             st.write("Invalid input format. Please enter valid time values in HH:MM:SS format.")
-    #     except ValueError:
-    #         st.write("Error: Please enter valid time values in HH:MM:SS format.")
-    if st.button('Start Calculation'):
-        calculate_company(company[selected_company],selected_company,column1_data,column2_data)
-        # try:
-        #     calculate_company(company[selected_company],selected_company,column1_data,column2_data)
-        # except ValueError:
+    #     calculate_company(company[selected_company],selected_company,column1_data,column2_data)
+    #     # try:
+    #     #     calculate_company(company[selected_company],selected_company,column1_data,column2_data)
+    #     # except ValueError:
         #     st.write("Error: Please enter valid time values in HH:MM:SS format.")
 
