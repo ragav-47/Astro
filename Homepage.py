@@ -286,7 +286,7 @@ def Home():
     # Display the results in a DataFrame
     if results:
         df = pd.DataFrame(results)
-        df.index = range(1+len(df)+1)
+        df.index = range(1,len(df)+1)
         df.index.name = 'S.No'
         st.table(df)
 
