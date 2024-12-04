@@ -288,6 +288,7 @@ def Home():
         df = pd.DataFrame(results)
         df.index = range(1,len(df)+1)
         df.index.name = 'S.No'
+        df = df.reset_index()
         st.table(df)
 
 
