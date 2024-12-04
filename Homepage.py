@@ -294,7 +294,22 @@ def Home():
             use_container_width=True,
         )
         if st.button('Print'):
-            st.write('<script>window.print();</script>', unsafe_allow_html=True)
+            # Create a print-specific HTML
+            print_html = f"""
+            <html>
+            <head>
+                <script>
+                window.onload = function() {{
+                    window.print();
+                }}
+                </script>
+            </head>
+            <body>
+                {df.to_html(index=True)}
+            </body>
+            </html>
+            """
+            st.components.v1.html(print_html, height=0, scrolling=False)
 
 
     # selected_company = st.selectbox('Select Row', company.keys())
