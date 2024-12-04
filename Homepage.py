@@ -285,8 +285,8 @@ def Home():
 
     def to_print_html(df):
         # Modify the DataFrame to include S.No in the column names
-        df_print = df.copy()
-        df_print.index.name = 'S.No'
+        df_print = df.reset_index()
+        df_print.columns = ['S.No'] + list(df.columns)
         
         # Convert to HTML with centered style
         html = df_print.to_html(index=True, classes='dataframe')
