@@ -283,33 +283,63 @@ def Home():
     # Calculate for all companies
     results = calculate_companies(column1_data, column2_data,company)
 
-    # Display the results in a DataFrame
-    if results:
-        df = pd.DataFrame(results)
-        df = df.reset_index(drop=True)
-        df.index = range(1, len(df)+1)
-        df.index.name = 'S.No'        
-        st.dataframe(
-            df, 
-            use_container_width=True,
-        )
-        if st.button('Print'):
-            # Create a print-specific HTML
-            print_html = f"""
-            <html>
-            <head>
-                <script>
-                window.onload = function() {{
-                    window.print();
-                }}
-                </script>
-            </head>
-            <body>
-                {df.to_html(index=True)}
-            </body>
-            </html>
-            """
-            st.components.v1.html(print_html, height=0, scrolling=False)
+    def to_print_html(df):
+    # Modify the DataFrame to include S.No in the column names
+    df_print = df.copy()
+    df_print.index.name = 'S.No'
+    
+    # Convert to HTML with centered style
+    html = df_print.to_html(index=True, classes='dataframe')
+    
+    # Add CSS for printing
+    print_html = f"""
+    <html>
+    <head>
+        <style>
+        .dataframe {{
+            border-collapse: collapse;
+            width: 100%;
+        }}
+        .dataframe th, .dataframe td {{
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }}
+        @media print {{
+            body * {{ visibility: hidden; }}
+            .dataframe, .dataframe * {{ visibility: visible; }}
+            .dataframe {{ 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+            }}
+        }}
+        </style>
+        <script>
+        window.onload = function() {{
+            window.print();
+        }}
+        </script>
+    </head>
+    <body>
+        {html}
+    </body>
+    </html>
+    """
+    return print_html
+
+if results:
+    df = pd.DataFrame(results)
+    df = df.reset_index(drop=True)
+    df.index = range(1, len(df)+1)
+    df.index.name = 'S.No'        
+    
+    st.dataframe(df, use_container_width=True)
+    
+    if st.button('Print'):
+        print_html = to_print_html(df)
+        st.components.v1.html(print_html, height=0, scrolling=False)
 
 
     # selected_company = st.selectbox('Select Row', company.keys())
