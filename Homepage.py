@@ -289,7 +289,15 @@ def Home():
         df = df.reset_index(drop=True)
         df.index = range(1, len(df)+1)
         df.index.name = 'S.No'
-        st.dataframe(df, use_container_width=True)
+         # Calculate height based on number of rows
+        rows = len(df)
+        height = min(300, max(100, rows * 35))  # Adjust row height as needed
+        
+        st.dataframe(
+            df, 
+            use_container_width=True,
+            height=height
+        )
 
 
     # selected_company = st.selectbox('Select Row', company.keys())
