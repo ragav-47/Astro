@@ -288,16 +288,13 @@ def Home():
         df = pd.DataFrame(results)
         df = df.reset_index(drop=True)
         df.index = range(1, len(df)+1)
-        df.index.name = 'S.No'
-         # Calculate height based on number of rows
-        rows = len(df)
-        height = min(300, max(100, rows * 35))  # Adjust row height as needed
-        
+        df.index.name = 'S.No'        
         st.dataframe(
             df, 
             use_container_width=True,
-            height=height
         )
+        if st.button('Print'):
+            st.write('<script>window.print();</script>', unsafe_allow_html=True)
 
 
     # selected_company = st.selectbox('Select Row', company.keys())
