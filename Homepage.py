@@ -289,7 +289,7 @@ def Home():
         df = df.reset_index(drop=True)
         df.index = range(1, len(df)+1)
         df.index.name = 'S.No'
-        st.dataframe(df)
+        st.dataframe(df, use_container_width=True)
 
 
     # selected_company = st.selectbox('Select Row', company.keys())
