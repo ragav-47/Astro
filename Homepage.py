@@ -289,7 +289,7 @@ def Home():
         df_print.columns = ['S.No'] + list(df.columns)
         
         # Convert to HTML with centered style
-        html = df_print.to_html(index=True, classes='dataframe')
+        html = df_print.to_html(index=False, classes='dataframe')
         
         # Add CSS for printing
         print_html = f"""
