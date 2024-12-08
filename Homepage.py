@@ -111,7 +111,7 @@ def calculate_companies(column1_data, column2_data,company):
             num1, num2 = number // 10, number % 10
             
             column1 = cal_div(column1_data[row_names.index(order[num1-1])], column1_data[row_names.index(order[num2-1])])
-            column2 = cal_div(column1_data[row_names.index(order[num1-1])], column1_data[row_names.index(order[num2-1])])
+            column2 = cal_div(column2_data[row_names.index(order[num1-1])], column2_data[row_names.index(order[num2-1])])
         else:
             column1 = column1_data[row_names.index(order[number-1])]
             column2 = column2_data[row_names.index(order[number-1])]
