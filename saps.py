@@ -50,7 +50,7 @@ def cal_saps(h1, m1, s1, h2, m2, s2,part):
     
     div=0
     if diff != 0:
-        div = 390 * 60 / diff
+        div = 375 * 60 / diff
     star_1 = calculate_star(h1, m1, s1,part)
     var = star_1.split('(')[-1].split(')')[0]
     start_index = list(model.keys()).index(var)
@@ -61,7 +61,7 @@ def cal_saps(h1, m1, s1, h2, m2, s2,part):
     index = start_index
     initial_index = start_index
     
-    time = 9*3600  # Start at 9:00 AM
+    time = (9*3600) + (15*60)  # Start at 9:15 AM
     prev_sub = total_seconds_1
 
     while True:
