@@ -351,9 +351,26 @@ def Home():
         df = df.reset_index(drop=True)
         df.index = range(1, len(df)+1)
         df.index.name = 'S.No'        
-        
-        st.dataframe(df, use_container_width=True)
-        
+        # Calculate dynamic column widths based on content
+        # Convert column widths to standard Python integers
+        column_config = {}
+        for col in df.columns:
+            # Convert max length to standard Python int
+            max_length = int(df[col].astype(str).str.len().max())
+            
+            width = min(max_length * 10, 500)  # Limit max width to 500 pixels
+            
+            column_config[col] = st.column_config.TextColumn(
+                col, 
+                width=width
+            )
+
+        # Display the dataframe with dynamic column widths
+        st.dataframe(
+            df, 
+            column_config=column_config,
+            use_container_width=True
+        )
         if st.button('Print'):
             print_html = to_print_html(df)
             st.components.v1.html(print_html, height=0, scrolling=False)
