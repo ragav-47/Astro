@@ -104,8 +104,8 @@ def cal_div(column1,column2):
 #     st.table(df)
 def calculate_companies(column1_data, column2_data,company):
     results = []
-    order = ['சூரியன்', 'சந்திரன்', 'குரு', 'ராகு','புதன்','சுக்கிரன்','கேது', 'சனி', 'செவ்வாய்','Y', 'YY']
-    for selected_company,number in company.items():
+    order = ['சூரியன்', 'சந்திரன்', 'குரு', 'ராகு','புதன்','சுக்கிரன்','கேது', 'சனி', 'செவ்வாய்']
+    for number,selected_company in company.items():
         
         if number > 10:
             num1, num2 = number // 10, number % 10
@@ -256,18 +256,23 @@ def Home():
         save_data_to_firestore(db, date_str, column1_data, column2_data)
     
     company={
-        "HDFC BANK":14,
-        "ICICI BANK":22,
-        "SBI BANK":9,
-        "TCS":19,
-        "INFOSYS":16,
-        "MARUTI":15,
-        "TATA MOTORS":17,
-        "BHARATI AIRTEL":23,
-        "ASIAN PAINTS":15,
-        "TATA STEELS":16,
-        "L&T":11,
-        "ITC":25,
+        19:["TCS"],
+        11:["TITAN","L&T","ONGC"],
+        20:["BRITANIA","CIPLA"],
+        9:["SBI BANK","TATA POWER"],
+        18:["AXIS BANK","KOTAK BANK"],
+        22:["ICICI BANK"],
+        13:["TATA CONSUMER","WIPRO"],
+        12:["DR.REDDY's","BAJAJ FINANCE"],
+        21:["HCL","NESTLE","SUN PHARMA","SOUTH INDIAN BANK","BPCL"],
+        17:["TATA MOTORS"],
+        26:["INDUS BANK","HUL","ULTRA"],
+        23:["BHARTI","KARNATAKA BANK"],
+        16:["HERO","INFOSYS","TATA STEEL"],
+        25:["ITC","NTPC"],
+        15:["ASIAN","MARUTI","RELIANCE"],
+        33:["BAJAJ AUTO"]
+
         
         # "ACC": 1,
         # "TITAN" : 1,
