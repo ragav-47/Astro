@@ -265,7 +265,7 @@ def Home():
         13:["TATA CONSUMER","WIPRO"],
         12:["DR.REDDY's","BAJAJ FINANCE"],
         21:["HCL","NESTLE","SUN PHARMA","SOUTH INDIAN BANK","BPCL"],
-        17:["TATA MOTORS"],
+        17:["TATA MOTORS","JSW STEEL"],
         26:["INDUS BANK","HUL","ULTRA"],
         23:["BHARTI","KARNATAKA BANK"],
         16:["HERO","INFOSYS","TATA STEEL"],
