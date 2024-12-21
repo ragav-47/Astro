@@ -51,111 +51,65 @@ def cal_div(column1,column2):
     new_s //= 2
     divided_result = f"{new_h:02}:{new_m:02}:{new_s:02}"
     return divided_result
-# def calculate_company(number,selected_company,column1_data,column2_data):
-#     if number>10:
-#         num1,num2=number//10,number%10
-#         column1 = cal_div(column1_data[num1-1],column1_data[num2-1])
-#         column2 = cal_div(column2_data[num1-1],column2_data[num2-1])
-#     else:
-#         column1 = column1_data[number-1]
-#         column2 = column2_data[number-1]
-    
-#     Rasi_1 = []
-#     h, m, s = map(int, column2.split(':'))
-#     part_size = 360 / 12
-#     x = (h // part_size) % 12
-#     x = int(x)
-#     Rasi_1.append(Rasi[x])
-    
-#     star_1 = []
-#     h1, m1, s1 = map(int, column1.split(':'))
-#     h2, m2, s2 = map(int, column2.split(':'))
 
-#     total_seconds_1 = h1 * 3600 + m1 * 60 + s1
-#     total_seconds_2 = h2 * 3600 + m2 * 60 + s2
-
-#     part_size = (360 * 3600) / 27
-#     index_1 = int(total_seconds_1 // part_size) % 27
-#     index_2 = int(total_seconds_2 // part_size) % 27
-
-#     # Use a list to store stars for each row
-#     temp = [star[index_1]]
-#     if index_1 != index_2:
-#         temp.append(star[index_2])
-#     star_1.append(temp)
-#     # Flatten star_1 for DataFrame creation
-#     star_1_flat = ["  &  ".join(stars) for stars in star_1]
-    
-#     saps = []
-#     h1, m1, s1 = map(int, column1.split(':'))
-#     h2, m2, s2 = map(int, column2.split(':'))
-#     saps.append(cal_saps(h1, m1, s1,h2, m2, s2,360))
-#     formatted_saps = [' , '.join(sublist) for sublist in saps]
-    
-#     df = pd.DataFrame({
-#         'Column 1': column1,
-#         'Column 2': column2,
-#         'ராசி': Rasi_1,
-#         'நட்சத்திரம்': star_1_flat,
-#         'சப்ஸ்': formatted_saps,
-#     }, index=[selected_company])
-    
-#     # Display the DataFrame as a table
-#     st.table(df)
 def calculate_companies(column1_data, column2_data,company):
     results = []
     order = ['சூரியன்', 'சந்திரன்', 'குரு', 'ராகு','புதன்','சுக்கிரன்','கேது', 'சனி', 'செவ்வாய்']
-    for number,selected_company in company.items():
-        
-        if number > 10:
-            num1, num2 = number // 10, number % 10
-            
-            column1 = cal_div(column1_data[row_names.index(order[num1-1])], column1_data[row_names.index(order[num2-1])])
-            column2 = cal_div(column2_data[row_names.index(order[num1-1])], column2_data[row_names.index(order[num2-1])])
-        else:
-            column1 = column1_data[row_names.index(order[number-1])]
-            column2 = column2_data[row_names.index(order[number-1])]
+    for selected_company,numbers in company.items():
+        for number in numbers:
+            if number > 10:
+                num1, num2 = number // 10, number % 10
+                
+                column1 = cal_div(column1_data[row_names.index(order[num1-1])], column1_data[row_names.index(order[num2-1])])
+                column2 = cal_div(column2_data[row_names.index(order[num1-1])], column2_data[row_names.index(order[num2-1])])
+            else:
+                column1 = column1_data[row_names.index(order[number-1])]
+                column2 = column2_data[row_names.index(order[number-1])]
 
-        Rasi_1 = []
-        h, m, s = map(int, column2.split(':'))
-        part_size = 360 / 12
-        x = (h // part_size) % 12
-        x = int(x)
-        Rasi_1.append(Rasi[x])
+            Rasi_1 = []
+            h, m, s = map(int, column2.split(':'))
+            part_size = 360 / 12
+            x = (h // part_size) % 12
+            x = int(x)
+            Rasi_1.append(Rasi[x])
 
-        star_1 = []
-        h1, m1, s1 = map(int, column1.split(':'))
-        h2, m2, s2 = map(int, column2.split(':'))
+            star_1 = []
+            h1, m1, s1 = map(int, column1.split(':'))
+            h2, m2, s2 = map(int, column2.split(':'))
 
-        total_seconds_1 = h1 * 3600 + m1 * 60 + s1
-        total_seconds_2 = h2 * 3600 + m2 * 60 + s2
+            total_seconds_1 = h1 * 3600 + m1 * 60 + s1
+            total_seconds_2 = h2 * 3600 + m2 * 60 + s2
 
-        part_size = (360 * 3600) / 27
-        index_1 = int(total_seconds_1 // part_size) % 27
-        index_2 = int(total_seconds_2 // part_size) % 27
+            part_size = (360 * 3600) / 27
+            index_1 = int(total_seconds_1 // part_size) % 27
+            index_2 = int(total_seconds_2 // part_size) % 27
 
-        # Use a list to store stars for each row
-        temp = [star[index_1]]
-        if index_1 != index_2:
-            temp.append(star[index_2])
-        star_1.append(temp)
-        # Flatten star_1 for DataFrame creation
-        star_1_flat = ["  &  ".join(stars) for stars in star_1]
+            # Use a list to store stars for each row
+            temp = [star[index_1]]
+            if index_1 != index_2:
+                temp.append(star[index_2])
+            star_1.append(temp)
+            # Flatten star_1 for DataFrame creation
+            star_1_flat = ["  &  ".join(stars) for stars in star_1]
 
-        saps = []
-        h1, m1, s1 = map(int, column1.split(':'))
-        h2, m2, s2 = map(int, column2.split(':'))
-        saps.append(cal_saps(h1, m1, s1, h2, m2, s2, 360))
-        formatted_saps = [' , '.join(sublist) for sublist in saps]
+            saps = []
+            h1, m1, s1 = map(int, column1.split(':'))
+            h2, m2, s2 = map(int, column2.split(':'))
+            saps.append(cal_saps(h1, m1, s1, h2, m2, s2, 360))
+            formatted_saps = [' , '.join(sublist) for sublist in saps]
 
-        results.append({
-            'Company': selected_company,
-            'Column 1': column1,
-            'Column 2': column2,
-            'ராசி': Rasi_1,
-            'நட்சத்திரம்': star_1_flat,
-            'சப்ஸ்': formatted_saps,
-        })
+            results.append({
+                'Company': selected_company,
+                'START': column1,
+                'END': column2,
+                # 'ராசி': Rasi_1,
+                # 'நட்சத்திரம்': star_1_flat,
+                'சப்ஸ்': formatted_saps,
+                'Column 1': "",
+                'Column 2': "",
+                'Column 3': "",
+                'Column 4': "",
+            })
     
     return results
 def Home():
@@ -256,51 +210,42 @@ def Home():
         save_data_to_firestore(db, date_str, column1_data, column2_data)
     
     company={
-        19:["TCS"],
-        11:["TITAN","L&T","ONGC"],
-        20:["BRITANIA","CIPLA"],
-        9:["SBI BANK","TATA POWER"],
-        18:["AXIS BANK","KOTAK BANK"],
-        22:["ICICI BANK"],
-        13:["TATA CONSUMER","WIPRO"],
-        12:["DR.REDDY's","BAJAJ FINANCE"],
-        21:["HCL","NESTLE","SUN PHARMA","SOUTH INDIAN BANK","BPCL"],
-        17:["TATA MOTORS","JSW STEEL"],
-        26:["INDUS BANK","HUL","ULTRA"],
-        23:["BHARTI","KARNATAKA BANK"],
-        16:["HERO","INFOSYS","TATA STEEL"],
-        25:["ITC","NTPC"],
-        15:["ASIAN","MARUTI","RELIANCE"],
-        33:["BAJAJ AUTO"]
-
+        "INFOSYS" : [16,43],
+        "TCS":[19,83],
+        "HCL":[21,92],
+        "WIPRO":[27,86],
+        "TECH MAHENDRA":[31,72],
+        "AXIS":[15,32],
+        "BAJAJ FINANCE":[12,87],
+        "HDFC":[14,82],
+        "ICICI":[22,44],
+        "BAJAJ FINSERV":[34,92],
+        "INDUS":[26,52],
+        "KOTAK MAHINDRA":[18,88],
+        "SBI":[9,13],
+        "CIPLA":[20,43],
+        "DR.REDDY":[12,29],
+        "NATCO":[26,74],
+        "SUN PHARMA":[24,36],
+        "BAJAJ AUTO":[33,91],
+        "HERO":[16,84],
+        "TATA MOTORS":[17,54],
+        "MARUTI":[15,45],
+        "POWER GRID":[35,74],
+        "NTPC":[25,93],
+        "TATA POWER":[9,36],
+        "BPCL":[21,28],
+        "ONGC":[11,14],
+        "RIL":[15,14],
+        "JSW":[17,61],
+        "L&T":[11,87],
+        "TATA STEEL":[16,17],
+        "BRITANNIA":[20,37],
+        "HUC":[26,26],
+        "ITC":[25,89],
+        "NESTLE":[21,66],
+        "TATA CONSUMERS":[13,13],
         
-        # "ACC": 1,
-        # "TITAN" : 1,
-        # "ONGC" : 1,
-        # ",
-        # "BAJAJ FINANCE": 12,
-        # "DR.REDDY'S":12,
-        # "EICHER MOTORS":12,"M&M":12,"HCL":12,"NESTLE":12,"SUN PHARMA":12,"SOUTH INDIAN BANK":12,
-        # "TATA consumer":15,"WIPRO":15,"TRENT":15,
-        
-        # "LT MIND TREE":14,
-        # ,,"RIL":17,
-        # "HERO":19,,,
-        # "TATA ELXI":18,,"JSW STEEL":18,
-        # "AXIS BANK":16,"KOTAK BANK":16,
-        
-        # "CHIPLA":2,"TATA COMMUNICATIONS":2,
-        # "BAJAJ AUTO":5,
-        # "BAJAJ FINSERV":54,
-        # "POWER GRID":57,
-        # "APOLLO HOSPITAL":59,
-        # ,"KARNATAKA BANK":25,"TATA TECHNOLOGIES":25,
-        # ,"NTPL":27,
-        # "HUL":29,"INDUSIND BANK":29,"ULTRA CEMENTS":29,
-        # "TECH MAHINDRA":28,
-        
-        # "TATA POWER":3,
-        # "GRASSIM":6
         }
     # Calculate for all companies
     results = calculate_companies(column1_data, column2_data,company)
@@ -350,10 +295,9 @@ def Home():
         </html>
         """
         return print_html
-
+    
     if results:
-        df = pd.DataFrame(results)
-        df = df.reset_index(drop=True)
+        df = pd.DataFrame(results).reset_index(drop=True)
         df.index = range(1, len(df)+1)
         df.index.name = 'S.No'        
         # Calculate dynamic column widths based on content
