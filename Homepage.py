@@ -266,6 +266,7 @@ def Home():
             .dataframe {{
                 border-collapse: collapse;
                 width: 100%;
+                font-size: 12px;
             }}
             .dataframe th, .dataframe td {{
                 border: 1px solid black;
